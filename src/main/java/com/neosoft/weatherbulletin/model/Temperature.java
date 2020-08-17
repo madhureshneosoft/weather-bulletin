@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Parameters of the Forecast like temperature and humidity
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
