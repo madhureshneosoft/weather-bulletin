@@ -34,28 +34,6 @@ public class WeatherServiceImpl implements WeatherService {
         String url = UrlBuilder.urlBuilder(requestPayload);
         RestTemplate restTemplate = new RestTemplate();
 
-        /*if(requestPayload.getCityName()!=null){
-            if(requestPayload.getStateCode()!=null){
-                if(requestPayload.getCountryCode()!=null){
-                    url.append("https://api.openweathermap.org/data/2.5/forecast?q=").append(requestPayload.getCityName()).append(",").append(requestPayload.getStateCode()).append(",").append(requestPayload.getCountryCode()).append("&appid=").append(API_KEY);
-                } else {
-                    url.append("https://api.openweathermap.org/data/2.5/forecast?q=").append(requestPayload.getCityName()).append(",").append(requestPayload.getStateCode()).append("&appid=").append(API_KEY);
-                }
-            } else {
-                url.append("https://api.openweathermap.org/data/2.5/forecast?q=").append(requestPayload.getCityName()).append("&appid=").append(API_KEY);
-            }
-        } else {
-            throw new InvalidException("Invalid payload, please ensure the payload is in correct format as shown below," +
-                    "eg:" +
-                    "{" +
-                    "'from':'HH:mm', " +
-                    "'to':'HH:mm', " +
-                    "'cityName':'YOUR_CITY' [MANDATORY]," +
-                    "'stateCode':'STATE_CODE' [OPTIONAL]," +
-                    "'countryCode':'COUNTRY_CODE' [OPTIONAL]" +
-                    "}");
-        }*/
-
         WeatherForecast weatherForecast = restTemplate.getForObject(url, WeatherForecast.class);
 
         if (weatherForecast != null) {

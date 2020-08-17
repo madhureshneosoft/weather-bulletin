@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * Controller
+ */
 @RestController
 @RequestMapping("/api/weather")
 public class WeatherController extends Validator {

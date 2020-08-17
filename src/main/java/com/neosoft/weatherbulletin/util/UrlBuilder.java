@@ -2,6 +2,9 @@ package com.neosoft.weatherbulletin.util;
 
 import com.neosoft.weatherbulletin.model.Details;
 
+/**
+ * URL builder depending upon given parameters in payload
+ */
 public class UrlBuilder {
 
     private static final String API_KEY = "e7c69e6bedbfb287c51a138119311fec";

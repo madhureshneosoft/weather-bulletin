@@ -1,6 +1,5 @@
 package com.neosoft.weatherbulletin.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.neosoft.weatherbulletin.exception.InvalidException;
 import com.neosoft.weatherbulletin.model.Details;
@@ -44,7 +43,7 @@ public class WeatherControllerTest {
     String url;
 
     @Before
-    public void setup() throws JsonProcessingException {
+    public void setup() {
         weatherController = new WeatherController(weatherService);
         details = new Details();
         url = "https://localhost:8080/api/weather/forecast";

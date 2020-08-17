@@ -11,6 +11,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Abstract class for validation and to build Response Entity
+ */
 @Component
 public abstract class Validator {
 
