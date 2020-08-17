@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -33,16 +34,17 @@ public abstract class Validator {
     }
 
     protected ResponseEntity<?> responseBuilder(List<Report> reports, long responseTime){
+        SimpleDateFormat format = new SimpleDateFormat("dd MMMM yyyy");
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_YEAR, 1);
         Date start = calendar.getTime();
-        calendar.add(Calendar.DAY_OF_YEAR, 3);
+        calendar.add(Calendar.DAY_OF_YEAR, 2);
         Date end = calendar.getTime();
         Response response = new Response(HttpStatus.OK,
                 "Success",
                 reports,
                 String.valueOf(responseTime),
-                "Weather Forecast for "+reports.get(0).getCityName()+" dated from "+start+" to "+end);
+                "Weather Forecast for "+reports.get(0).getCityName()+" dated from "+format.format(start)+" to "+format.format(end));
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
