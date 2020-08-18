@@ -8,7 +8,7 @@ Prerequesities
 
 # About
 
-Weather bulletin is a weather forecast API used to check the weather forecast of next 3 days for the required city. <br />
+Weather bulletin is a weather forecast API used to check the weather forecast of next 3 days for a given city. <br />
 This API uses the OpenWeather API [ https://openweathermap.org/api ] to fetch the weather forecast for the given city. <br />
 User needs to provide city name and work hours in the payload, API gives the average min/max temperature and humidity for work and non-work hours. <br />
 
