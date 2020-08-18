@@ -1,8 +1,8 @@
 package com.neosoft.weatherbulletin.controller;
 
 import com.neosoft.weatherbulletin.exception.InvalidException;
-import com.neosoft.weatherbulletin.model.Report;
 import com.neosoft.weatherbulletin.model.Details;
+import com.neosoft.weatherbulletin.model.Report;
 import com.neosoft.weatherbulletin.service.WeatherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

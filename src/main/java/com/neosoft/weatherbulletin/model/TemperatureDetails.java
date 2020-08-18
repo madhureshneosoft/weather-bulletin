@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Temperature {
+public class TemperatureDetails {
     @JsonProperty("temp")
     private double temperature;
 

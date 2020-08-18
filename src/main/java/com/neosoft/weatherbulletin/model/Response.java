@@ -1,9 +1,9 @@
 package com.neosoft.weatherbulletin.model;
 
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 
-import java.sql.Time;
 import java.util.List;
 
 /**
