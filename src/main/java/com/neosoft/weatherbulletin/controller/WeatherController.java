@@ -3,6 +3,7 @@ package com.neosoft.weatherbulletin.controller;
 import com.neosoft.weatherbulletin.exception.InvalidException;
 import com.neosoft.weatherbulletin.model.Details;
 import com.neosoft.weatherbulletin.model.Report;
+import com.neosoft.weatherbulletin.model.Response;
 import com.neosoft.weatherbulletin.service.WeatherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +34,7 @@ public class WeatherController extends Validator {
      * @return response entity
      */
     @PostMapping("/forecast")
-    public ResponseEntity<?> weatherForecast(@RequestBody Details details) {
+    public ResponseEntity<Response> weatherForecast(@RequestBody Details details) {
         long time = System.currentTimeMillis();
         long responseTime;
         List<Report> reports;
