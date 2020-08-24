@@ -1,6 +1,7 @@
 package com.neosoft.weatherbulletin.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.neosoft.weatherbulletin.exception.InvalidException;
 import com.neosoft.weatherbulletin.model.Details;
 import com.neosoft.weatherbulletin.model.Report;
@@ -62,7 +63,7 @@ public class WeatherControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print());
 
-        verify(weatherService,times(1)).getResponse(any());
+        verify(weatherService,times(0)).getResponse(any());
     }
 
     @Test
@@ -82,7 +83,7 @@ public class WeatherControllerTest {
 
     @Test
     public void valid() throws Exception {
-        String payload = "{\"from\" : \"09:30\", \"to\" : \"18:30\", \"cityName\" : \"London\"}";
+        String payload = "{\"workTimeFrom\" : \"09:30\", \"workTimeTo\" : \"18:30\", \"cityName\" : \"London\", \"apiKey\" : \"e7c69e6bedbfb287c51a138119311fec\"}";
         List<Report> reports = Arrays.asList(new Report(),new Report(),new Report());
 
         doReturn(reports).when(weatherService).getResponse(any());
@@ -95,5 +96,103 @@ public class WeatherControllerTest {
                 .andDo(MockMvcResultHandlers.print());
 
         verify(weatherService,times(1)).getResponse(any());
+    }
+
+    @Test
+    public void serviceValidTest() throws Exception {
+        String payload = "{\"workTimeFrom\" : \"09:30\", \"workTimeTo\" : \"18:30\", \"cityName\" : \"London\", \"apiKey\" : \"e7c69e6bedbfb287c51a138119311fec\"}";
+
+        Gson gson = new Gson();
+
+        when(weatherService.getResponse(gson.fromJson(payload,Details.class))).thenCallRealMethod();
+
+        mockMvc.perform(MockMvcRequestBuilders.post(url)
+                .content(payload)
+                .characterEncoding("utf-8")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+
+    @Test
+    public void serviceInvalidTest() throws Exception {
+        String payload = "{\"workTimeFrom\" : \"09:30\", \"workTimeTo\" : \"18:30\", \"cityName\" : \"ASJHDAJ\", \"apiKey\" : \"e7c69e6bedbfb287c51a138119311fec\"}";
+
+        Gson gson = new Gson();
+
+        when(weatherService.getResponse(gson.fromJson(payload,Details.class))).thenCallRealMethod();
+
+        mockMvc.perform(MockMvcRequestBuilders.post(url)
+                .content(payload)
+                .characterEncoding("utf-8")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    public void serviceValidTest2() throws Exception {
+        String payload = "{\n" +
+                "    \"workTimeFrom\" : \"09:30\"," +
+                "    \"workTimeTo\" : \"18:30\"," +
+                "    \"countryCode\" : \"India\"," +
+                "    \"apiKey\" : \"e7c69e6bedbfb287c51a138119311fec\"" +
+                "}";
+
+        Gson gson = new Gson();
+
+        when(weatherService.getResponse(gson.fromJson(payload,Details.class))).thenCallRealMethod();
+
+        mockMvc.perform(MockMvcRequestBuilders.post(url)
+                .content(payload)
+                .characterEncoding("utf-8")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    public void serviceValidTest3() throws Exception {
+        String payload = "{\n" +
+                "    \"workTimeFrom\" : \"09:30\"," +
+                "    \"workTimeTo\" : \"18:30\"," +
+                "    \"stateCode\" : \"Maharashtra\"," +
+                "    \"apiKey\" : \"e7c69e6bedbfb287c51a138119311fec\"" +
+                "}";
+
+        Gson gson = new Gson();
+
+        when(weatherService.getResponse(gson.fromJson(payload,Details.class))).thenCallRealMethod();
+
+        mockMvc.perform(MockMvcRequestBuilders.post(url)
+                .content(payload)
+                .characterEncoding("utf-8")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    public void serviceValidTest4() throws Exception {
+        String payload = "{\n" +
+                "    \"workTimeFrom\" : \"09:30\"," +
+                "    \"workTimeTo\" : \"18:30\"," +
+                "    \"cityName\" : \"Mumbai\"," +
+                "    \"stateCode\" : \"Maharashtra\"," +
+                "    \"countryCode\" : \"India\"," +
+                "    \"apiKey\" : \"e7c69e6bedbfb287c51a138119311fec\"" +
+                "}";
+
+        Gson gson = new Gson();
+
+        when(weatherService.getResponse(gson.fromJson(payload,Details.class))).thenCallRealMethod();
+
+        mockMvc.perform(MockMvcRequestBuilders.post(url)
+                .content(payload)
+                .characterEncoding("utf-8")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(MockMvcResultHandlers.print());
     }
 }

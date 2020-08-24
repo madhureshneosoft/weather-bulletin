@@ -7,9 +7,10 @@ import lombok.Data;
  */
 @Data
 public class Details {
-    private String from;
-    private String to;
+    private String workTimeFrom;
+    private String workTimeTo;
     private String cityName;
     private String stateCode;
     private String countryCode;
+    private String apiKey;
 }

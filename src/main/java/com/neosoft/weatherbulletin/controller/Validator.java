@@ -19,9 +19,9 @@ import java.util.List;
 public abstract class Validator {
 
     protected boolean valid(Details payload){
-        return timeValidation(payload.getFrom()) &&
-        timeValidation(payload.getTo()) &&
-        payloadValidation(payload);
+        return payloadValidation(payload) &&
+                timeValidation(payload.getWorkTimeFrom()) &&
+                timeValidation(payload.getWorkTimeTo());
     }
 
     private boolean timeValidation(String time){
@@ -30,10 +30,15 @@ public abstract class Validator {
     }
 
     private boolean payloadValidation(Details payload){
-        return payload.getCityName() != null && payload.getTo() != null && payload.getFrom() != null;
+        return ((!(payload.getCityName()==null && payload.getStateCode()==null && payload.getCountryCode()==null))
+                &&(isNotNullOrEmpty(payload.getApiKey()) && isNotNullOrEmpty(payload.getWorkTimeTo()) && isNotNullOrEmpty(payload.getWorkTimeFrom())));
     }
 
-    protected ResponseEntity<Response> responseBuilder(List<Report> reports, long responseTime){
+    private boolean isNotNullOrEmpty(String str) {
+        return str != null && !str.trim().isEmpty();
+    }
+
+    protected ResponseEntity<Response> responseBuilder(List<Report> reports,String cityName ,long responseTime){
         SimpleDateFormat format = new SimpleDateFormat("dd MMMM yyyy");
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_YEAR, 1);
@@ -44,7 +49,7 @@ public abstract class Validator {
                 "Success",
                 reports,
                 String.valueOf(responseTime),
-                "Weather Forecast for "+reports.get(0).getCityName()+" dated from "+format.format(start)+" to "+format.format(end));
+                "Weather Forecast for "+cityName+" dated from "+format.format(start)+" to "+format.format(end));
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

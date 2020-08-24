@@ -1,6 +1,5 @@
 package com.neosoft.weatherbulletin.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,8 +12,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Report {
     private int day;
-    @JsonIgnore
-    private String cityName;
     private double workHoursMaxTemperature;
     private double workHoursMinTemperature;
     private double workHoursHumidity;

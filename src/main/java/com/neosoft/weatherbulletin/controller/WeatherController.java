@@ -6,6 +6,7 @@ import com.neosoft.weatherbulletin.model.Report;
 import com.neosoft.weatherbulletin.model.Response;
 import com.neosoft.weatherbulletin.service.WeatherService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,7 +34,7 @@ public class WeatherController extends Validator {
      * @param details request payload by user
      * @return response entity
      */
-    @PostMapping("/forecast")
+    @PostMapping(path = "/forecast", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Response> weatherForecast(@RequestBody Details details) {
         long time = System.currentTimeMillis();
         long responseTime;
@@ -41,15 +42,17 @@ public class WeatherController extends Validator {
         try {
             if(valid(details)) {
                 reports = weatherService.getResponse(details);
-            } else {
+            }
+            else {
                 throw new InvalidException("Invalid payload, please ensure the payload is in correct format as shown below," +
                         "eg:" +
                         "{" +
-                        "'from':'HH:mm' [24 HOURS FORMAT], " +
-                        "'to':'HH:mm' [24 HOURS FORMAT], " +
-                        "'cityName':'YOUR_CITY' [MANDATORY]," +
-                        "'stateCode':'STATE_CODE' [OPTIONAL]," +
-                        "'countryCode':'COUNTRY_CODE' [OPTIONAL]" +
+                        "'workTimeFrom':'HH:mm' [24 HOURS FORMAT], " +
+                        "'workTimeTo':'HH:mm' [24 HOURS FORMAT], " +
+                        "'cityName':'CITY_NAME'," +
+                        "'stateCode':'STATE_CODE'," +
+                        "'countryCode':'COUNTRY_CODE'," +
+                        "'apiKey':'YOUR_API_KEY' [MANDATORY]" +
                         "}");
             }
         } catch (Exception e) {
@@ -57,6 +60,6 @@ public class WeatherController extends Validator {
             return exceptionResponseBuilder(responseTime,e.getMessage());
         }
         responseTime = (System.currentTimeMillis() - time);
-        return responseBuilder(reports,responseTime);
+        return responseBuilder(reports,details.getCityName(),responseTime);
     }
 }
