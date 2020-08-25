@@ -16,14 +16,14 @@ import java.util.List;
  * Abstract class for validation and to build Response Entity
  */
 @Component
-public abstract class Validator {
+public class Validator {
 
     /**
      * Checks whether or not the payload is valid
      * @param payload input by user
      * @return true/false
      */
-    protected boolean valid(Details payload){
+    protected static boolean valid(Details payload){
         return payloadValidation(payload) &&
                 timeValidation(payload.getWorkTimeStart()) &&
                 timeValidation(payload.getWorkTimeEnd());
@@ -34,7 +34,7 @@ public abstract class Validator {
      * @param time given by user in payload
      * @return true/false
      */
-    private boolean timeValidation(String time){
+    private static boolean timeValidation(String time){
         String pattern = "^([01]\\d|2[0-3]):?([0-5]\\d)$";
         return time.matches(pattern);
     }
@@ -44,7 +44,7 @@ public abstract class Validator {
      * @param payload input by the user
      * @return true/false
      */
-    private boolean payloadValidation(Details payload){
+    private static boolean payloadValidation(Details payload){
         return ((!(payload.getCityName()==null && payload.getStateCode()==null && payload.getCountryCode()==null))
                 &&(isNotNullOrEmpty(payload.getApiKey()) && isNotNullOrEmpty(payload.getWorkTimeEnd()) && isNotNullOrEmpty(payload.getWorkTimeStart())));
     }
@@ -54,7 +54,7 @@ public abstract class Validator {
      * @param str to be checked
      * @return true/false
      */
-    private boolean isNotNullOrEmpty(String str) {
+    private static boolean isNotNullOrEmpty(String str) {
         return str != null && !str.trim().isEmpty();
     }
 
@@ -64,7 +64,7 @@ public abstract class Validator {
      * @param responseTime of the api
      * @return ResponseEntity object
      */
-    protected ResponseEntity<Response> responseBuilder(List<Report> reports,long responseTime){
+    protected static ResponseEntity<Response> responseBuilder(List<Report> reports,long responseTime){
         SimpleDateFormat format = new SimpleDateFormat("dd MMMM yyyy");
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_YEAR, 1);
@@ -85,7 +85,7 @@ public abstract class Validator {
      * @param exception that has occurred
      * @return ResponseEntity object
      */
-    protected ResponseEntity<Response> exceptionResponseBuilder(long responseTime,String exception){
+    protected static ResponseEntity<Response> exceptionResponseBuilder(long responseTime,String exception){
         Response response = new Response(HttpStatus.BAD_REQUEST,"Failed",null,String.valueOf(responseTime),exception);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

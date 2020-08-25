@@ -20,7 +20,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/weather")
-public class WeatherController extends Validator {
+public class WeatherController {
 
     private final WeatherService weatherService;
 
@@ -40,7 +40,7 @@ public class WeatherController extends Validator {
         long responseTime;
         List<Report> reports;
         try {
-            if(valid(details)) {
+            if(Validator.valid(details)) {
                 reports = weatherService.getResponse(details);
             }
             else {
@@ -57,9 +57,9 @@ public class WeatherController extends Validator {
             }
         } catch (Exception e) {
             responseTime = (System.currentTimeMillis() - time);
-            return exceptionResponseBuilder(responseTime,e.getMessage());
+            return Validator.exceptionResponseBuilder(responseTime,e.getMessage());
         }
         responseTime = (System.currentTimeMillis() - time);
-        return responseBuilder(reports,responseTime);
+        return Validator.responseBuilder(reports,responseTime);
     }
 }
