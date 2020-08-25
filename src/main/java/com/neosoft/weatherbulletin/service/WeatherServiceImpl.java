@@ -1,10 +1,13 @@
 package com.neosoft.weatherbulletin.service;
 
+import com.neosoft.weatherbulletin.exception.InvalidException;
 import com.neosoft.weatherbulletin.model.*;
 import com.neosoft.weatherbulletin.util.UrlBuilder;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
@@ -14,6 +17,12 @@ import java.util.List;
 
 @Service
 public class WeatherServiceImpl implements WeatherService {
+
+    @Value("${first.day}")
+    private int firstDay;
+
+    @Value("${last.day}")
+    private int lastDay;
 
     @Override
     public List<Report> getResponse(Details requestPayload) {
@@ -34,27 +43,29 @@ public class WeatherServiceImpl implements WeatherService {
      * @param reportList next 3 days report
      */
     private void checkDaysGap(List<WeatherDetails> weatherDetails, LocalTime workTimeFrom, LocalTime workTimeTo, List<DayReport> reportList) {
-        for (WeatherDetails details : weatherDetails) {
-            String dateStamp = details.getDate().substring(0, 10);
-            long daysGap = ChronoUnit.DAYS.between(LocalDate.now(), LocalDate.parse(dateStamp));
-            if (daysGap >= 1 && daysGap <= 3) {
-                int index = (int) daysGap - 1;
-                String timeStamp = details.getDate().substring(11, 19);
-                LocalTime givenTime = LocalTime.parse(timeStamp);
-                if (givenTime.isAfter(workTimeFrom) && givenTime.isBefore(workTimeTo)) {
-                    reportList.get(index).getAvgWorkHourMaxTemp().add(details.getTemperatureDetails().getTemperatureMaximum());
-                    reportList.get(index).getAvgWorkHourMinTemp().add(details.getTemperatureDetails().getTemperatureMinimum());
-                    reportList.get(index).getAvgWorkHourHumidity().add(details.getTemperatureDetails().getHumidity());
-                } else {
-                    reportList.get(index).getAvgNonWorkHourMaxTemp().add(details.getTemperatureDetails().getTemperatureMaximum());
-                    reportList.get(index).getAvgNonWorkHourMinTemp().add(details.getTemperatureDetails().getTemperatureMinimum());
-                    reportList.get(index).getAvgNonWorkHourHumidity().add(details.getTemperatureDetails().getHumidity());
+        weatherDetails.forEach(details -> {
+            try {
+                String dateStamp = UrlBuilder.extractDateStamp(details.getDate());
+                long daysGap = ChronoUnit.DAYS.between(LocalDate.now(), LocalDate.parse(dateStamp));
+                if (daysGap >= firstDay && daysGap <= lastDay) {
+                    int index = (int) daysGap - 1;
+                    String timeStamp = UrlBuilder.extractTimeStamp(details.getDate());
+                    LocalTime givenTime = LocalTime.parse(timeStamp);
+                    if (givenTime.isAfter(workTimeFrom) && givenTime.isBefore(workTimeTo)) {
+                        reportList.get(index).getAvgWorkHourMaxTemp().add(details.getTemperatureDetails().getTemperatureMaximum());
+                        reportList.get(index).getAvgWorkHourMinTemp().add(details.getTemperatureDetails().getTemperatureMinimum());
+                        reportList.get(index).getAvgWorkHourHumidity().add(details.getTemperatureDetails().getHumidity());
+                    } else {
+                        reportList.get(index).getAvgNonWorkHourMaxTemp().add(details.getTemperatureDetails().getTemperatureMaximum());
+                        reportList.get(index).getAvgNonWorkHourMinTemp().add(details.getTemperatureDetails().getTemperatureMinimum());
+                        reportList.get(index).getAvgNonWorkHourHumidity().add(details.getTemperatureDetails().getHumidity());
+                    }
+                    reportList.get(index).setDay((int) daysGap);
                 }
-                reportList.get(index).setDay((int) daysGap);
-            } else if (daysGap > 3){
-                break;
+            } catch (ParseException e){
+                throw new InvalidException("Date not parsable");
             }
-        }
+        });
     }
 
     /**
@@ -64,7 +75,7 @@ public class WeatherServiceImpl implements WeatherService {
      */
     private List<Report> calculateAverage(List<DayReport> report) {
         List<Report> reports = new ArrayList<>();
-        for (DayReport dayReport : report) {
+        report.forEach(dayReport -> {
             Report reportObj = new Report();
             reportObj.setDay(dayReport.getDay());
             reportObj.setNonWorkHoursMaxTemperature(dayReport.getAvgNonWorkHourMaxTemp().stream().mapToDouble(Double::doubleValue).sum() / dayReport.getAvgNonWorkHourMaxTemp().size());
@@ -74,7 +85,7 @@ public class WeatherServiceImpl implements WeatherService {
             reportObj.setWorkHoursMinTemperature(dayReport.getAvgWorkHourMinTemp().stream().mapToDouble(Double::doubleValue).sum() / dayReport.getAvgWorkHourMinTemp().size());
             reportObj.setWorkHoursHumidity(dayReport.getAvgWorkHourHumidity().stream().mapToDouble(Double::doubleValue).sum() / dayReport.getAvgWorkHourHumidity().size());
             reports.add(reportObj);
-        }
+        });
         return reports;
     }
 }

@@ -14,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
@@ -48,6 +49,8 @@ public class WeatherControllerTest {
         weatherController = new WeatherController(weatherService);
         details = new Details();
         url = "https://localhost:8080/api/weather/forecast";
+        ReflectionTestUtils.setField(weatherService, "firstDay", 1);
+        ReflectionTestUtils.setField(weatherService, "lastDay", 3);
     }
 
     @Test
@@ -178,7 +181,7 @@ public class WeatherControllerTest {
         String payload = "{\n" +
                 "    \"workTimeStart\" : \"09:30\"," +
                 "    \"workTimeEnd\" : \"18:30\"," +
-                "    \"cityName\" : \"Mumbai\"," +
+                "    \"cityName\" : \"Pune\"," +
                 "    \"stateCode\" : \"Maharashtra\"," +
                 "    \"countryCode\" : \"India\"," +
                 "    \"apiKey\" : \"e7c69e6bedbfb287c51a138119311fec\"" +

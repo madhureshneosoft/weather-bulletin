@@ -2,6 +2,10 @@ package com.neosoft.weatherbulletin.util;
 
 import com.neosoft.weatherbulletin.model.Details;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * URL builder depending upon given parameters in payload
  */
@@ -38,5 +42,15 @@ public class UrlBuilder {
 
         url.append(apiKey);
         return url.toString();
+    }
+
+    public static String extractTimeStamp(String dateAndTime) throws ParseException {
+        Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dateAndTime);
+        return new SimpleDateFormat("HH:mm").format(date);
+    }
+
+    public static String extractDateStamp(String dateAndTime) throws ParseException {
+        Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dateAndTime);
+        return new SimpleDateFormat("yyyy-MM-dd").format(date);
     }
 }
