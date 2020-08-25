@@ -7,8 +7,8 @@ import lombok.Data;
  */
 @Data
 public class Details {
-    private String workTimeFrom;
-    private String workTimeTo;
+    private String workTimeStart;
+    private String workTimeEnd;
     private String cityName;
     private String stateCode;
     private String countryCode;

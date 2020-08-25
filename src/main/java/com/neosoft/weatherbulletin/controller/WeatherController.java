@@ -47,8 +47,8 @@ public class WeatherController extends Validator {
                 throw new InvalidException("Invalid payload, please ensure the payload is in correct format as shown below," +
                         "eg:" +
                         "{" +
-                        "'workTimeFrom':'HH:mm' [24 HOURS FORMAT], " +
-                        "'workTimeTo':'HH:mm' [24 HOURS FORMAT], " +
+                        "'workTimeStart':'HH:mm' [24 HOURS FORMAT], " +
+                        "'workTimeEnd':'HH:mm' [24 HOURS FORMAT], " +
                         "'cityName':'CITY_NAME'," +
                         "'stateCode':'STATE_CODE'," +
                         "'countryCode':'COUNTRY_CODE'," +
@@ -60,6 +60,6 @@ public class WeatherController extends Validator {
             return exceptionResponseBuilder(responseTime,e.getMessage());
         }
         responseTime = (System.currentTimeMillis() - time);
-        return responseBuilder(reports,details.getCityName(),responseTime);
+        return responseBuilder(reports,responseTime);
     }
 }

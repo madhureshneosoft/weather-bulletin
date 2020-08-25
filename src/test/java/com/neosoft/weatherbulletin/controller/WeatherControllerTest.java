@@ -51,8 +51,8 @@ public class WeatherControllerTest {
     }
 
     @Test
-    public void cityNotFound() throws Exception {
-        String payload = "{\"from\" : \"09:30\", \"to\" : \"18:30\", \"cityName\" : \"ASDASD\"}";
+    public void noApiKey() throws Exception {
+        String payload = "{\"workTimeStart\" : \"09:30\", \"workTimeEnd\" : \"18:30\", \"cityName\" : \"ASDASD\"}";
 
         doThrow(InvalidException.class).when(weatherService).getResponse(any());
 
@@ -68,7 +68,7 @@ public class WeatherControllerTest {
 
     @Test
     public void invalidPayload() throws Exception {
-        String payload = "{\"from\" : \"09:30\", \"to\" : \"18:30\"}";
+        String payload = "{\"start\" : \"09:30\", \"end\" : \"18:30\"}";
         doThrow(InvalidException.class).when(weatherService).getResponse(any());
 
         mockMvc.perform(MockMvcRequestBuilders.post(url)
@@ -83,7 +83,7 @@ public class WeatherControllerTest {
 
     @Test
     public void valid() throws Exception {
-        String payload = "{\"workTimeFrom\" : \"09:30\", \"workTimeTo\" : \"18:30\", \"cityName\" : \"London\", \"apiKey\" : \"e7c69e6bedbfb287c51a138119311fec\"}";
+        String payload = "{\"workTimeStart\" : \"09:30\", \"workTimeEnd\" : \"18:30\", \"cityName\" : \"London\", \"apiKey\" : \"e7c69e6bedbfb287c51a138119311fec\"}";
         List<Report> reports = Arrays.asList(new Report(),new Report(),new Report());
 
         doReturn(reports).when(weatherService).getResponse(any());
@@ -100,7 +100,7 @@ public class WeatherControllerTest {
 
     @Test
     public void serviceValidTest() throws Exception {
-        String payload = "{\"workTimeFrom\" : \"09:30\", \"workTimeTo\" : \"18:30\", \"cityName\" : \"London\", \"apiKey\" : \"e7c69e6bedbfb287c51a138119311fec\"}";
+        String payload = "{\"workTimeStart\" : \"09:30\", \"workTimeEnd\" : \"18:30\", \"cityName\" : \"London\", \"apiKey\" : \"e7c69e6bedbfb287c51a138119311fec\"}";
 
         Gson gson = new Gson();
 
@@ -134,8 +134,8 @@ public class WeatherControllerTest {
     @Test
     public void serviceValidTest2() throws Exception {
         String payload = "{\n" +
-                "    \"workTimeFrom\" : \"09:30\"," +
-                "    \"workTimeTo\" : \"18:30\"," +
+                "    \"workTimeStart\" : \"09:30\"," +
+                "    \"workTimeEnd\" : \"18:30\"," +
                 "    \"countryCode\" : \"India\"," +
                 "    \"apiKey\" : \"e7c69e6bedbfb287c51a138119311fec\"" +
                 "}";
@@ -155,8 +155,8 @@ public class WeatherControllerTest {
     @Test
     public void serviceValidTest3() throws Exception {
         String payload = "{\n" +
-                "    \"workTimeFrom\" : \"09:30\"," +
-                "    \"workTimeTo\" : \"18:30\"," +
+                "    \"workTimeStart\" : \"09:30\"," +
+                "    \"workTimeEnd\" : \"18:30\"," +
                 "    \"stateCode\" : \"Maharashtra\"," +
                 "    \"apiKey\" : \"e7c69e6bedbfb287c51a138119311fec\"" +
                 "}";
@@ -176,8 +176,8 @@ public class WeatherControllerTest {
     @Test
     public void serviceValidTest4() throws Exception {
         String payload = "{\n" +
-                "    \"workTimeFrom\" : \"09:30\"," +
-                "    \"workTimeTo\" : \"18:30\"," +
+                "    \"workTimeStart\" : \"09:30\"," +
+                "    \"workTimeEnd\" : \"18:30\"," +
                 "    \"cityName\" : \"Mumbai\"," +
                 "    \"stateCode\" : \"Maharashtra\"," +
                 "    \"countryCode\" : \"India\"," +

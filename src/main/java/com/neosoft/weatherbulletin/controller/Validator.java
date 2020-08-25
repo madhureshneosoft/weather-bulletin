@@ -25,8 +25,8 @@ public abstract class Validator {
      */
     protected boolean valid(Details payload){
         return payloadValidation(payload) &&
-                timeValidation(payload.getWorkTimeFrom()) &&
-                timeValidation(payload.getWorkTimeTo());
+                timeValidation(payload.getWorkTimeStart()) &&
+                timeValidation(payload.getWorkTimeEnd());
     }
 
     /**
@@ -46,7 +46,7 @@ public abstract class Validator {
      */
     private boolean payloadValidation(Details payload){
         return ((!(payload.getCityName()==null && payload.getStateCode()==null && payload.getCountryCode()==null))
-                &&(isNotNullOrEmpty(payload.getApiKey()) && isNotNullOrEmpty(payload.getWorkTimeTo()) && isNotNullOrEmpty(payload.getWorkTimeFrom())));
+                &&(isNotNullOrEmpty(payload.getApiKey()) && isNotNullOrEmpty(payload.getWorkTimeEnd()) && isNotNullOrEmpty(payload.getWorkTimeStart())));
     }
 
     /**
@@ -61,11 +61,10 @@ public abstract class Validator {
     /**
      * Builds response that is to be sent to UI if there are no exceptions
      * @param reports for the next 3 days
-     * @param cityName for which weather is fetched
      * @param responseTime of the api
      * @return ResponseEntity object
      */
-    protected ResponseEntity<Response> responseBuilder(List<Report> reports,String cityName ,long responseTime){
+    protected ResponseEntity<Response> responseBuilder(List<Report> reports,long responseTime){
         SimpleDateFormat format = new SimpleDateFormat("dd MMMM yyyy");
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_YEAR, 1);
@@ -76,7 +75,7 @@ public abstract class Validator {
                 "Success",
                 reports,
                 String.valueOf(responseTime),
-                "Weather Forecast for "+cityName+" dated from "+format.format(start)+" to "+format.format(end));
+                "Weather Forecast dated from "+format.format(start)+" to "+format.format(end));
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

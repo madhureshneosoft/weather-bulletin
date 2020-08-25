@@ -18,8 +18,8 @@ public class WeatherServiceImpl implements WeatherService {
     @Override
     public List<Report> getResponse(Details requestPayload) throws Exception {
         List<DayReport> reportList = Arrays.asList(new DayReport(), new DayReport(), new DayReport());
-        Calendar workTimeFrom = getTimeAsCalenderObject(requestPayload.getWorkTimeFrom());
-        Calendar workTimeTo = getTimeAsCalenderObject(requestPayload.getWorkTimeTo());
+        Calendar workTimeFrom = getTimeAsCalenderObject(requestPayload.getWorkTimeStart());
+        Calendar workTimeTo = getTimeAsCalenderObject(requestPayload.getWorkTimeEnd());
         String url = UrlBuilder.urlBuilder(requestPayload);
         WeatherForecast weatherForecast = new RestTemplate().getForObject(url, WeatherForecast.class);
         if (weatherForecast != null) {
