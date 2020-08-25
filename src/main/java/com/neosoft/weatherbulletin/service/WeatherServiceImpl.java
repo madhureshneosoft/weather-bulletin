@@ -1,6 +1,5 @@
 package com.neosoft.weatherbulletin.service;
 
-import com.neosoft.weatherbulletin.exception.InvalidException;
 import com.neosoft.weatherbulletin.model.*;
 import com.neosoft.weatherbulletin.util.UrlBuilder;
 import org.springframework.stereotype.Service;
@@ -22,12 +21,8 @@ public class WeatherServiceImpl implements WeatherService {
         Calendar workTimeTo = getTimeAsCalenderObject(requestPayload.getWorkTimeEnd());
         String url = UrlBuilder.urlBuilder(requestPayload);
         WeatherForecast weatherForecast = new RestTemplate().getForObject(url, WeatherForecast.class);
-        if (weatherForecast != null) {
-            checkDaysGap(weatherForecast.getWeatherDetails(), workTimeFrom, workTimeTo, reportList);
-            return calculateAverage(reportList);
-        } else {
-            throw new InvalidException("No data found for the given city, please ensure the city you have entered is correct.");
-        }
+        checkDaysGap(weatherForecast.getWeatherDetails(), workTimeFrom, workTimeTo, reportList);
+        return calculateAverage(reportList);
     }
 
     /**

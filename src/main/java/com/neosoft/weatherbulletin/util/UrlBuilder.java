@@ -1,6 +1,5 @@
 package com.neosoft.weatherbulletin.util;
 
-import com.neosoft.weatherbulletin.exception.InvalidException;
 import com.neosoft.weatherbulletin.model.Details;
 
 /**
