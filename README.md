@@ -18,8 +18,8 @@ User needs to provide city name and work hours in the payload, API gives the ave
 
 Clone the application from github and then run the application and using postman provide the payload in following format : <br />
   { <br />
-   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "from":"HH:mm" 			[24 HOURS FORMAT, MANDATORY], <br />
-   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "to":"HH:mm" 			[24 HOURS FORMAT, MANDATORY], <br />
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "workTimeStart":"HH:mm" 			[24 HOURS FORMAT, MANDATORY], <br />
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "workTimeEnd":"HH:mm" 			[24 HOURS FORMAT, MANDATORY], <br />
    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "cityName":"CITY_NAME",<br />
    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "stateCode":"STATE_CODE",<br />
    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "countryCode":"COUNTRY_CODE"<br /> 
