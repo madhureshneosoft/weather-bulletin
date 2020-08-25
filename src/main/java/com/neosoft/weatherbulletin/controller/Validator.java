@@ -7,9 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -35,8 +33,8 @@ public class Validator {
      * @return true/false
      */
     private static boolean timeValidation(String time){
-        String pattern = "^([01]\\d|2[0-3]):?([0-5]\\d)$";
-        return time.matches(pattern);
+        String timeRegEx = "^([01]\\d|2[0-3]):?([0-5]\\d)$";
+        return time.matches(timeRegEx);
     }
 
     /**
@@ -64,18 +62,15 @@ public class Validator {
      * @param responseTime of the api
      * @return ResponseEntity object
      */
-    protected static ResponseEntity<Response> responseBuilder(List<Report> reports,long responseTime){
-        SimpleDateFormat format = new SimpleDateFormat("dd MMMM yyyy");
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DAY_OF_YEAR, 1);
-        Date start = calendar.getTime();
-        calendar.add(Calendar.DAY_OF_YEAR, 2);
-        Date end = calendar.getTime();
+    protected static ResponseEntity<Response> responseBuilder(List<Report> reports,long responseTime) {
+        LocalDate date = LocalDate.now();
+        String startDate = date.plusDays(1).toString();
+        String endDate = date.plusDays(3).toString();
         Response response = new Response(HttpStatus.OK,
                 "Success",
                 reports,
                 String.valueOf(responseTime),
-                "Weather Forecast dated from "+format.format(start)+" to "+format.format(end));
+                "Weather Forecast dated from "+startDate+" to "+endDate);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

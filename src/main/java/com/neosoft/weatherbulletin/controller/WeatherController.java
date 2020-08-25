@@ -44,7 +44,7 @@ public class WeatherController {
                 reports = weatherService.getResponse(details);
             }
             else {
-                throw new InvalidException("Invalid payload, please ensure the payload is in correct format as shown below," +
+                throw new InvalidException("Invalid payload, please ensure the payload has at least 1 attribute of cityName, stateCode & countryCode and is in correct format as shown below," +
                         "eg:" +
                         "{" +
                         "'workTimeStart':'HH:mm' [24 HOURS FORMAT], " +
