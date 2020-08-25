@@ -14,7 +14,7 @@ User needs to provide city name and work hours in the payload, API gives the ave
 
 # How to run
 
-To run the application, get a free API key from openweathermap.com by registering an account and put it to file /src/main/java/com/neosoft/weatherbulletin/util/UrlBuilder.java file
+To run the application, get a free API key from openweathermap.com by registering an account.
 
 Clone the application from github and then run the application and using postman provide the payload in following format : <br />
   { <br />
