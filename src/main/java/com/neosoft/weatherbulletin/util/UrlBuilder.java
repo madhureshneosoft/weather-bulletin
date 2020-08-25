@@ -12,6 +12,11 @@ public class UrlBuilder {
 
     private static final String URL = "https://api.openweathermap.org/data/2.5/forecast?q=";
 
+    /**
+     * Builds the url depending upon number of parameters given by user in the payload
+     * @param requestPayload given by user as input
+     * @return url of the api to be called
+     */
     public static String urlBuilder(Details requestPayload) {
         StringBuilder url = new StringBuilder().append(URL);
 

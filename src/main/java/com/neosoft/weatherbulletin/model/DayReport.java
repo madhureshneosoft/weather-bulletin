@@ -5,6 +5,9 @@ import lombok.Data;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * To add and find average of required temperatures for a given day
+ */
 @Data
 public class DayReport {
     private int day;

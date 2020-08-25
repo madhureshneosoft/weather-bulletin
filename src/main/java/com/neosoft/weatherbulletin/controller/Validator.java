@@ -18,26 +18,53 @@ import java.util.List;
 @Component
 public abstract class Validator {
 
+    /**
+     * Checks whether or not the payload is valid
+     * @param payload input by user
+     * @return true/false
+     */
     protected boolean valid(Details payload){
         return payloadValidation(payload) &&
                 timeValidation(payload.getWorkTimeFrom()) &&
                 timeValidation(payload.getWorkTimeTo());
     }
 
+    /**
+     * To check if the time mentioned is in correct format and is valid
+     * @param time given by user in payload
+     * @return true/false
+     */
     private boolean timeValidation(String time){
         String pattern = "^([01]\\d|2[0-3]):?([0-5]\\d)$";
         return time.matches(pattern);
     }
 
+    /**
+     * Checks if mandatory fields in payload is present or not
+     * @param payload input by the user
+     * @return true/false
+     */
     private boolean payloadValidation(Details payload){
         return ((!(payload.getCityName()==null && payload.getStateCode()==null && payload.getCountryCode()==null))
                 &&(isNotNullOrEmpty(payload.getApiKey()) && isNotNullOrEmpty(payload.getWorkTimeTo()) && isNotNullOrEmpty(payload.getWorkTimeFrom())));
     }
 
+    /**
+     * To check whether a string is not null or empty
+     * @param str to be checked
+     * @return true/false
+     */
     private boolean isNotNullOrEmpty(String str) {
         return str != null && !str.trim().isEmpty();
     }
 
+    /**
+     * Builds response that is to be sent to UI if there are no exceptions
+     * @param reports for the next 3 days
+     * @param cityName for which weather is fetched
+     * @param responseTime of the api
+     * @return ResponseEntity object
+     */
     protected ResponseEntity<Response> responseBuilder(List<Report> reports,String cityName ,long responseTime){
         SimpleDateFormat format = new SimpleDateFormat("dd MMMM yyyy");
         Calendar calendar = Calendar.getInstance();
@@ -53,6 +80,12 @@ public abstract class Validator {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    /**
+     * Builds response that is to be sent to UI if there are exceptions
+     * @param responseTime of the api
+     * @param exception that has occurred
+     * @return ResponseEntity object
+     */
     protected ResponseEntity<Response> exceptionResponseBuilder(long responseTime,String exception){
         Response response = new Response(HttpStatus.BAD_REQUEST,"Failed",null,String.valueOf(responseTime),exception);
         return new ResponseEntity<>(response, HttpStatus.OK);
