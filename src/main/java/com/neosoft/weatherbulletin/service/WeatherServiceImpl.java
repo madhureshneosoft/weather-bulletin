@@ -5,23 +5,24 @@ import com.neosoft.weatherbulletin.util.UrlBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Service
 public class WeatherServiceImpl implements WeatherService {
 
     @Override
-    public List<Report> getResponse(Details requestPayload) throws Exception {
+    public List<Report> getResponse(Details requestPayload) {
         List<DayReport> reportList = Arrays.asList(new DayReport(), new DayReport(), new DayReport());
-        Calendar workTimeFrom = getTimeAsCalenderObject(requestPayload.getWorkTimeStart());
-        Calendar workTimeTo = getTimeAsCalenderObject(requestPayload.getWorkTimeEnd());
+        LocalTime workTimeStart = LocalTime.parse(requestPayload.getWorkTimeStart());
+        LocalTime workTimeEnd = LocalTime.parse(requestPayload.getWorkTimeEnd());
         String url = UrlBuilder.urlBuilder(requestPayload);
         WeatherForecast weatherForecast = new RestTemplate().getForObject(url, WeatherForecast.class);
-        checkDaysGap(weatherForecast.getWeatherDetails(), workTimeFrom, workTimeTo, reportList);
+        checkDaysGap(weatherForecast.getWeatherDetails(), workTimeStart, workTimeEnd, reportList);
         return calculateAverage(reportList);
     }
 
@@ -31,23 +32,25 @@ public class WeatherServiceImpl implements WeatherService {
      * @param workTimeFrom starting of the work time
      * @param workTimeTo end of the work time
      * @param reportList next 3 days report
-     * @throws ParseException if date given is not parsable
      */
-    private void checkDaysGap(List<WeatherDetails> weatherDetails, Calendar workTimeFrom, Calendar workTimeTo, List<DayReport> reportList) throws ParseException {
+    private void checkDaysGap(List<WeatherDetails> weatherDetails, LocalTime workTimeFrom, LocalTime workTimeTo, List<DayReport> reportList) {
         for (WeatherDetails details : weatherDetails) {
-            long daysGap = ChronoUnit.DAYS.between(LocalDate.now(), LocalDate.parse(details.getDate().substring(0, 10)));
+            String dateStamp = details.getDate().substring(0, 10);
+            long daysGap = ChronoUnit.DAYS.between(LocalDate.now(), LocalDate.parse(dateStamp));
             if (daysGap >= 1 && daysGap <= 3) {
-                Date givenTime = getTimeAsCalenderObject(details.getDate().substring(11, 19)).getTime();
-                if (givenTime.after(workTimeFrom.getTime()) && givenTime.before(workTimeTo.getTime())) {
-                    reportList.get((int) daysGap - 1).getAvgWorkHourMaxTemp().add(details.getTemperatureDetails().getTemperatureMaximum());
-                    reportList.get((int) daysGap - 1).getAvgWorkHourMinTemp().add(details.getTemperatureDetails().getTemperatureMinimum());
-                    reportList.get((int) daysGap - 1).getAvgWorkHourHumidity().add(details.getTemperatureDetails().getHumidity());
+                int index = (int) daysGap - 1;
+                String timeStamp = details.getDate().substring(11, 19);
+                LocalTime givenTime = LocalTime.parse(timeStamp);
+                if (givenTime.isAfter(workTimeFrom) && givenTime.isBefore(workTimeTo)) {
+                    reportList.get(index).getAvgWorkHourMaxTemp().add(details.getTemperatureDetails().getTemperatureMaximum());
+                    reportList.get(index).getAvgWorkHourMinTemp().add(details.getTemperatureDetails().getTemperatureMinimum());
+                    reportList.get(index).getAvgWorkHourHumidity().add(details.getTemperatureDetails().getHumidity());
                 } else {
-                    reportList.get((int) daysGap - 1).getAvgNonWorkHourMaxTemp().add(details.getTemperatureDetails().getTemperatureMaximum());
-                    reportList.get((int) daysGap - 1).getAvgNonWorkHourMinTemp().add(details.getTemperatureDetails().getTemperatureMinimum());
-                    reportList.get((int) daysGap - 1).getAvgNonWorkHourHumidity().add(details.getTemperatureDetails().getHumidity());
+                    reportList.get(index).getAvgNonWorkHourMaxTemp().add(details.getTemperatureDetails().getTemperatureMaximum());
+                    reportList.get(index).getAvgNonWorkHourMinTemp().add(details.getTemperatureDetails().getTemperatureMinimum());
+                    reportList.get(index).getAvgNonWorkHourHumidity().add(details.getTemperatureDetails().getHumidity());
                 }
-                reportList.get((int) daysGap - 1).setDay((int) daysGap);
+                reportList.get(index).setDay((int) daysGap);
             } else if (daysGap > 3){
                 break;
             }
@@ -73,19 +76,5 @@ public class WeatherServiceImpl implements WeatherService {
             reports.add(reportObj);
         }
         return reports;
-    }
-
-    /**
-     * Get the given time as a Calender object
-     * @param time given by user
-     * @return calender object
-     * @throws ParseException if given time is not parsable
-     */
-    private Calendar getTimeAsCalenderObject(String time) throws ParseException {
-        Date date = new SimpleDateFormat("HH:mm").parse(time);
-        Calendar calender = Calendar.getInstance();
-        calender.setTime(date);
-        calender.add(Calendar.DATE, 1);
-        return calender;
     }
 }
