@@ -18,10 +18,11 @@ To run the application, get a free API key from openweathermap.com by registerin
 
 Clone the application from github and then run the application and using postman provide the payload in following format : <br />
   { <br />
-   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 'from':'HH:mm'                [24 HOURS FORMAT, MANDATORY], <br />
-   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 'to':'HH:mm'                  [24 HOURS FORMAT, MANDATORY], <br />
-   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 'cityName':'YOUR_CITY'        [MANDATORY], <br />
-   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 'stateCode':'STATE_CODE'      [OPTIONAL], <br />
-   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 'countryCode':'COUNTRY_CODE'  [OPTIONAL] <br /> 
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 'from':'HH:mm' 			[24 HOURS FORMAT, MANDATORY], <br />
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 'to':'HH:mm' 			[24 HOURS FORMAT, MANDATORY], <br />
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 'cityName':'YOUR_CITY',<br />
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 'stateCode':'STATE_CODE',<br />
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 'countryCode':'COUNTRY_CODE'<br /> 
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 'apiKey':'YOUR_API_KEY' 	[MANDATORY]
   } <br />
 	as a POST request on the URL [ http://localhost:8080/api/weather/forecast ].
